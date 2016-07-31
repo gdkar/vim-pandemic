@@ -1,7 +1,10 @@
-import os, shutil, subprocess
+import os, shutil 
 
 class BundleActioner:
-    def __init__(self): pass;
+    check_output = __import__('subprocess').check_output
+
+    def __init__(self):
+        pass;
 
     def clone(self, source, name):
         return "";
@@ -15,20 +18,25 @@ class BundleActioner:
 
 
 class BundleGit(BundleActioner):
+
     def clone(self, source, name):
-        return subprocess.check_output(['git', 'clone', source, name]);
+        return self.check_output(['git', 'clone', source, name]);
+
     def update(self):
-        return subprocess.check_output(['git', 'pull']);
+        return self.check_output(['git', 'pull']);
     
 class BundleHg(BundleActioner):
+
     def clone(self, source, name):
-        return subprocess.check_output(['hg', 'clone', source, name]);
+        return self.check_output(['hg', 'clone', source, name]);
+
     def update(self):
-        return subprocess.check_output(['hg', 'pull']);
+        return self.check_output(['hg', 'pull']);
     
 class BundleLocal(BundleActioner):
+
     def clone(self, source, name):
-        outmsg = subprocess.check_output(['cp', '-R', source, name]);
+        outmsg = self.check_output(['cp', '-R', source, name]);
 
         f = open("%s/.source" %name, 'w');
         f.write(source);
@@ -47,8 +55,9 @@ class BundleLocal(BundleActioner):
         return self.clone(source, name);
 
 class BundleScript(BundleActioner):
+
     def clone(self, source, name):
-        return subprocess.check_output(['cp', '-R', source, name]);
+        return self.check_output(['cp', '-R', source, name]);
 
     def update(self):
         return subprocess.check_output(['./.update']);
